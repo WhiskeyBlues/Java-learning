@@ -25,8 +25,8 @@ same - (1, 1) - (4, 1)
          */
     }
 
-    public static int[][] getNextLetter(int[][] arr, int startX, int startY, int letter) {
-        int[][] result = {{-1, -1}, {-1, -1}};
+    public static int[] getNextLetter(int[][] arr, int startX, int startY, int letter) {
+        int[] result = {-1, -1};
         int columns = 3, rows = 3;
         int startCol = -1, startRow = -1;
 
@@ -47,8 +47,8 @@ same - (1, 1) - (4, 1)
         for (int x = startX + startRow; x < startX + rows + startRow; x++) {
             for (int y = startY + startCol; y < startY + columns + startCol; y++) {
                 if (arr[x][y] == letter) {
-                    result[0][0] = x;
-                    result[0][1] = y;
+                    result[0] = x;
+                    result[1] = y;
                 }
             }
         }
@@ -71,11 +71,11 @@ same - (1, 1) - (4, 1)
                         for (int k = 1; k < s.length(); k++) {
                             addIt = true;
                             System.out.printf("looking for '%s'... ", s.charAt(k));
-                            int[][] nextXY = getNextLetter(crossword, sx, sy, s.charAt(k));
-                            if (nextXY[0][0] != -1) {
-                                System.out.printf("'%s' found at %d:%d\n", s.charAt(k), nextXY[0][1], nextXY[0][0]);
-                                sx = nextXY[0][0];
-                                sy = nextXY[0][1];
+                            int[] nextXY = getNextLetter(crossword, sx, sy, s.charAt(k));
+                            if (nextXY[0] != -1) {
+                                System.out.printf("'%s' found at %d:%d\n", s.charAt(k), nextXY[1], nextXY[0]);
+                                sx = nextXY[0];
+                                sy = nextXY[1];
                             } else addIt = false;
                         }
                         if (addIt) {
