@@ -1,0 +1,120 @@
+package com.javarush.task.task20.task2027;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/* 
+Кроссворд
+*/
+
+public class Solution {
+    public static void main(String[] args) {
+        int[][] crossword = new int[][]{
+                {'f', 'd', 'e', 'r', 'l', 'k'},
+                {'u', 's', 'a', 'm', 'e', 'o'},
+                {'l', 'n', 'g', 'r', 'o', 'v'},
+                {'m', 'l', 'p', 'r', 'r', 'h'},
+                {'p', 'o', 'e', 'e', 'j', 'j'}
+        };
+        System.out.println(detectAllWords(crossword, "home", "same"));
+
+        /*
+Ожидаемый результат
+home - (5, 3) - (2, 0)
+same - (1, 1) - (4, 1)
+         */
+    }
+
+    public static int[] getNextLetter(int[][] arr, int startX, int startY, int letter) {
+        int[] result = {-1, -1};
+        int columns = 3, rows = 3;
+        int startCol = -1, startRow = -1;
+
+        if (startX == 0) {
+            startRow = 0;
+            rows = 2;
+        }
+        if (startX == arr[0].length) {
+            rows = 2;
+        }
+        if (startY == 0) {
+            startCol = 0;
+            columns = 2;
+        }
+        if (startY == arr.length) {
+            columns = 2;
+        }
+        for (int x = startX + startRow; x < startX + rows + startRow; x++) {
+            for (int y = startY + startCol; y < startY + columns + startCol; y++) {
+                if (arr[x][y] == letter) {
+                    result[0] = x;
+                    result[1] = y;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List<Word> detectAllWords(int[][] crossword, String... words) {
+        List<Word> result = new ArrayList<>();
+        for (String s : words) {
+            int sx, sy;
+            for (int i = 0; i < crossword.length; i++) {
+                for (int j = 0; j < crossword[i].length; j++) {
+                    if (s.charAt(0) == crossword[i][j]) {
+                        sx = i;
+                        sy = j;
+                        System.out.printf("\n***************\n" +
+                                "Char '%s' of '%s' found at pos %d:%d.\n" +
+                                "***************\n", s.charAt(0), s, j, i);
+                        boolean addIt = false;
+                        for (int k = 1; k < s.length(); k++) {
+                            addIt = true;
+                            System.out.printf("looking for '%s'... ", s.charAt(k));
+                            int[] nextXY = getNextLetter(crossword, sx, sy, s.charAt(k));
+                            if (nextXY[0] != -1) {
+                                System.out.printf("'%s' found at %d:%d\n", s.charAt(k), nextXY[1], nextXY[0]);
+                                sx = nextXY[0];
+                                sy = nextXY[1];
+                            } else addIt = false;
+                        }
+                        if (addIt) {
+                            Word toAdd = new Word(s);
+                            toAdd.setStartPoint(j, i);
+                            toAdd.setEndPoint(sy, sx);
+                            result.add(toAdd);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public static class Word {
+        private String text;
+        private int startX;
+        private int startY;
+        private int endX;
+        private int endY;
+
+        public Word(String text) {
+            this.text = text;
+        }
+
+        public void setStartPoint(int i, int j) {
+            startX = i;
+            startY = j;
+        }
+
+        public void setEndPoint(int i, int j) {
+            endX = i;
+            endY = j;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s - (%d, %d) - (%d, %d)", text, startX, startY, endX, endY);
+        }
+    }
+}
