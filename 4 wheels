@@ -24,20 +24,20 @@ public class Solution {
             String resStr = "";
             for (String s : loadWheelNamesFromDB()) {
                 try {
-                    int idx = 1;
+                    boolean wheelFound = false;
                     for (Wheel w : Wheel.values()) {
                         if (w.toString().equals(s)) {
                             if (!resStr.contains(s)) {
                                 fourWheels.add(Wheel.valueOf(s));
                                 resStr = resStr.concat(s);
-                                idx++;
+                                wheelFound = true;
                             } else {
                                 s = "ERROR: You are trying to setup more than 1 of " + s + " wheel.";
                                 throw new IllegalArgumentException(s);
                             }
                         }
                     }
-                    if (idx == 1) {
+                    if (!wheelFound) {
                         s = "ERROR: '" + s + "' is unknown type of wheel.";
                         throw new IllegalArgumentException(s);
                     }
