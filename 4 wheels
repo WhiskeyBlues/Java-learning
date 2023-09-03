@@ -1,0 +1,62 @@
+package com.javarush.task.task25.task2502;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/* 
+Машину на СТО не повезем!
+*/
+
+public class Solution {
+    public static enum Wheel {
+        FRONT_LEFT,
+        FRONT_RIGHT,
+        BACK_LEFT,
+        BACK_RIGHT
+    }
+
+    public static class Car {
+        protected List<Wheel> wheels;
+
+        public Car() {
+            //init wheels here
+            List<Wheel> fourWheels = new ArrayList<>();
+            String resStr = "";
+            for (String s : loadWheelNamesFromDB()) {
+                try {
+                    int idx = 1;
+                    for (Wheel w : Wheel.values()) {
+                        if (w.toString().equals(s)) {
+                            if (!resStr.contains(s)) {
+                                fourWheels.add(Wheel.valueOf(s));
+                                resStr = resStr.concat(s);
+                                idx++;
+                            } else {
+                                s = "ERROR: You are trying to setup more than 1 of " + s + " wheel.";
+                                throw new IllegalArgumentException(s);
+                            }
+                        }
+                    }
+                    if (idx == 1) {
+                        s = "ERROR: '" + s + "' is unknown type of wheel.";
+                        throw new IllegalArgumentException(s);
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.printf("%n%s%n", s);
+                    return;
+                }
+            }
+            wheels = fourWheels;
+            System.out.println("\nSuccessfully completed.");
+        }
+
+        protected String[] loadWheelNamesFromDB() {
+            //this method returns mock data
+            return new String[]{"FRONT_LEFT", "FRONT_RIGHT", "BACK_LEFT", "BACK_RIGHT"};
+        }
+    }
+
+    public static void main(String[] args) {
+        Car car = new Car();
+    }
+}
