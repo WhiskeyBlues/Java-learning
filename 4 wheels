@@ -46,8 +46,15 @@ public class Solution {
                     return;
                 }
             }
-            wheels = fourWheels;
-            System.out.println("\nSuccessfully completed.");
+
+            try {
+                if (fourWheels.size() != 4)
+                    throw new IllegalArgumentException("ERROR: Total amount of wheels is not equals to 4.");
+                wheels = fourWheels;
+                System.out.println("\nSuccessfully completed.");
+            } catch (IllegalArgumentException e) {
+                System.out.printf("%n%s%n", e.getMessage());
+            }
         }
 
         protected String[] loadWheelNamesFromDB() {
