@@ -42,7 +42,7 @@ public class Solution {
                         throw new IllegalArgumentException(s);
                     }
                 } catch (IllegalArgumentException e) {
-                    System.out.printf("%n%s%n", s);
+                    System.out.printf("%n%s%n", e.getMessage());
                     return;
                 }
             }
